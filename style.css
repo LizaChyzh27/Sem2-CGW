@@ -1,0 +1,166 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    background-color: #EEEEEE;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 0;
+    width: 100%;
+}
+h1 {
+    color: #333;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+/* CSS Variables for custom layout - Now with fixed values */
+:root {
+    --col1-width: 320px;
+    --col2-width: 600px;
+    --col3-width: 320px;
+    --gap-x: 20px;
+    --gap-y: 20px;
+}
+.main-layout {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: var(--gap-y) var(--gap-x);
+    width: 100%;
+    max-width: calc(var(--col1-width) + var(--col2-width) + var(--col3-width) + 2 * var(--gap-x));
+    justify-content: center; 
+}
+.column { 
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+    flex-grow: 0; 
+    flex-shrink: 0; 
+}
+/* Specific styles for each column to set its width */
+.column:nth-child(1) {
+    flex-basis: var(--col1-width);
+    width: var(--col1-width); /* Explicitly set width */
+    min-width: 280px; /* Minimum width for responsiveness on large screens */
+}
+.column:nth-child(2) { /* Column containing the canvas */
+    flex-basis: var(--col2-width);
+    width: var(--col2-width); /* Explicitly set width */
+    min-width: 320px; /* Minimum width for canvas column */
+    flex-grow: 2; /* Higher priority to take space if available */
+}
+.column:nth-child(3) {
+    flex-basis: var(--col3-width);
+    width: var(--col3-width); /* Explicitly set width */
+    min-width: 280px; /* Minimum width for responsiveness on large screens */
+}
+.controls-container {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+.controls-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+.controls-group label {
+    min-width: 120px;
+    font-weight: bold;
+}
+.controls-group input[type="text"],
+.controls-group select {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.controls-group button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+.controls-group button:hover:not(:disabled) {
+    background-color: #45a049;
+}
+.controls-group button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+#statusMessage {
+    font-weight: bold;
+    color: #333;
+}
+#canvas-holder {
+    position: relative;
+    width: 100%; /* Takes full width of its parent column */
+    height: 600px; /* Fixed height for 3D content on desktop */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden; /* Ensures content stays within rounded corners */
+    margin-top: 0; /* Adjusted for column layout */
+}
+#webcam {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+}
+#webglcanvas {
+    background-color: transparent;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+input[type="range"] {
+    width: calc(100% - 130px); /* Adjust width to accommodate label and value span */
+}
+.audio-controls, .filter-controls {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+/* Responsive adjustments */
+@media (max-width: 1000px) {
+    .main-layout {
+        flex-direction: column; /* Stacks columns vertically on smaller screens */
+        align-items: center;
+    }
+    .column {
+        width: 100%;
+        max-width: 600px; /* Limits width even when stacked */
+        flex-basis: auto; /* Allows auto flex-basis when stacked vertically */
+        flex-grow: 1;   /* Allows growth when stacked vertically */
+        flex-shrink: 1; /* Allows shrinking when stacked vertically */
+    }
+    .column:nth-child(1),
+    .column:nth-child(2),
+    .column:nth-child(3) {
+        width: 100%; /* Resets fixed width to 100% */
+        flex-grow: 1;
+        flex-basis: auto;
+        max-width: 600px; /* Still limits its maximum width */
+    }
+    #canvas-holder {
+        height: 0; /* Uses padding to maintain aspect ratio */
+        padding-bottom: 100%; /* 1:1 aspect ratio */
+    }
+}

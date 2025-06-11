@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGW (Spatial audio)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="init()">
+    <h1>Calculation&Graphics work (Spatial audio)</h1>
+    <div class="main-layout">
+        <div class="column">
+            <div class="controls-container">
+                <div class="controls-group">
+                    <label for="deviceType">Device Type:</label>
+                    <select id="deviceType" onchange="toggleSensorAddressInput()">
+                        <option value="ios">iOS</option>
+                        <option value="android">Android</option>
+                    </select>
+                </div>
+                <div class="controls-group">
+                    <label for="sensorAddress">Sensor Address:</label>
+                    <input type="text" id="sensorAddress" value="192.168.0.199:8080" placeholder="Enter sensor address">
+                </div>
+                <div class="controls-group">
+                    <button id='connectButton' onclick="connectSensorFromInput()">Connect Sensor</button>
+                </div>
+                <h4 id="statusMessage">Status: Not connected</h4>
+            </div>
+
+            <div class="controls-container">
+                <h3>Stereo Camera Parameters</h3>
+                <div class="controls-group">
+                    <label for="eyeSeparation">Eye Separation:</label>
+                    <input type="range" id="eyeSeparation" min="0.1" max="2.0" step="0.01" value="0.7">
+                    <span id="eyeSeparationValue">0.7</span>
+                </div>
+                <div class="controls-group">
+                    <label for="fov">FOV (radians):</label>
+                    <input type="range" id="fov" min="0.1" max="2.0" step="0.01" value="1.1">
+                    <span id="fovValue">1.1</span>
+                </div>
+                <div class="controls-group">
+                    <label for="near">Near Clipping:</label>
+                    <input type="range" id="near" min="1.0" max="10.0" step="0.1" value="8.0">
+                    <span id="nearValue">8.0</span>
+                </div>
+                <div class="controls-group">
+                    <label for="convergence">Convergence:</label>
+                    <input type="range" id="convergence" min="10.0" max="30.0" step="0.1" value="14.0">
+                    <span id="convergenceValue">14.0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div id="canvas-holder">
+                <video id="webcam" width="600" height="600" autoplay muted playsinline></video>
+                <canvas width="600" height="600" id="webglcanvas"></canvas>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="controls-container audio-controls">
+                <h3>Spatial Audio Control</h3>
+                <div class="controls-group">
+                    <label for="audioFile">Select Song:</label>
+                    <input type="file" id="audioFile" accept="audio/*">
+                </div>
+                <div class="controls-group">
+                    <button id="playPauseButton" disabled>Play</button>
+                </div>
+                <div class="filter-controls">
+                    <div class="controls-group">
+                        <label for="enableFilter">Enable Low-Shelf Filter:</label>
+                        <input type="checkbox" id="enableFilter">
+                    </div>
+                    <div class="controls-group">
+                        <label for="filterFrequency">Frequency:</label>
+                        <input type="range" id="filterFrequency" min="20" max="20000" step="10" value="300">
+                        <span id="filterFrequencyValue">300 Hz</span>
+                    </div>
+                    <div class="controls-group">
+                        <label for="filterGain">Gain:</label>
+                        <input type="range" id="filterGain" min="-40" max="40" step="1" value="10">
+                        <span id="filterGainValue">10 dB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./Utils/trackball-rotator.js"></script>
+    <script src="./Utils/m4.js"></script>
+    <script src="./shader.gpu"></script>
+    <script src="./Model.js"></script>
+    <script src="./StereoCamera.js"></script>
+    <script src="./main.js"></script>
+
+</body>
+</html>
