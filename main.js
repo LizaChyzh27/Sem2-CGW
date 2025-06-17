@@ -356,8 +356,8 @@ async function initAudio() {
     panner = audioContext.createPanner();
     panner.panningModel = 'HRTF'; // Модель панорамування (Head-Related Transfer Function) для реалістичного просторового звуку.
     panner.distanceModel = 'inverse'; // Як гучність зменшується з відстанню.
-    panner.refDistance = 1; // Відстань, на якій гучність не зменшується.
-    panner.maxDistance = 10; // Відстань, після якої звук стає дуже тихим.
+    panner.refDistance = 12; // Відстань, на якій гучність не зменшується.
+    panner.maxDistance = 20; // Відстань, після якої звук стає дуже тихим.
     panner.rolloffFactor = 1; // Коефіцієнт зменшення гучності з відстанню.
 
     // Властивості конуса PannerNode (для спрямованого звуку).
@@ -392,7 +392,7 @@ async function initAudio() {
         const file = event.target.files[0];
         if (file) {
             playPauseButton.disabled = true;
-            playPauseButton.textContent = "Завантаження...";
+            playPauseButton.textContent = "Loading...";
             const arrayBuffer = await file.arrayBuffer(); // Зчитати файл як ArrayBuffer.
             audioContext.decodeAudioData(arrayBuffer, (buffer) => { // Декодувати аудіодані.
                 // Якщо джерело вже існує і відтворюється, зупиняємо його перед завантаженням нового.
@@ -413,12 +413,12 @@ async function initAudio() {
 
                 audioReady = true; // Аудіо готове до відтворення.
                 playPauseButton.disabled = false;
-                playPauseButton.textContent = "Відтворити";
+                playPauseButton.textContent ="Play"; 
 
                 // Обробник події закінчення відтворення (для зациклення).
                 audioBufferSource.onended = () => {
                     audioPlaying = false;
-                    playPauseButton.textContent = "Відтворити";
+                    playPauseButton.textContent = "Play";
                 };
 
             }, (e) => {
@@ -434,7 +434,6 @@ async function initAudio() {
     enableFilterCheckbox.addEventListener('change', toggleFilter);
     filterFrequencyInput.addEventListener('input', updateFilterParameters);
     filterGainInput.addEventListener('input', updateFilterParameters);
-    filterQInput.addEventListener('input', updateFilterParameters);
 
     // Початкове оновлення дисплеїв параметрів фільтра.
     updateFilterParameters();
@@ -454,7 +453,7 @@ function toggleAudioPlayback() {
         if (audioBufferSource) {
             audioBufferSource.stop();
             audioPlaying = false;
-            playPauseButton.textContent = "Відтворити";
+            playPauseButton.textContent = "Play";
             // Повторно створюємо AudioBufferSourceNode, якщо хочемо відтворити знову після зупинки,
             // оскільки 'stop()' робить AudioBufferSourceNode непридатним для подальшого використання.
             const currentBuffer = audioBufferSource.buffer; // Зберігаємо поточний буфер.
@@ -476,7 +475,7 @@ function toggleAudioPlayback() {
             }
             audioBufferSource.start(0); // Починаємо відтворення з початку.
             audioPlaying = true;
-            playPauseButton.textContent = "Пауза";
+            playPauseButton.textContent = "Stop";
         } else {
             console.warn("Немає доступного джерела аудіобуфера. Спочатку виберіть файл.");
         }
@@ -507,7 +506,6 @@ function updateFilterParameters() {
 
     const frequency = parseFloat(filterFrequencyInput.value);
     const gain = parseFloat(filterGainInput.value);
-    const q = parseFloat(filterQInput.value);
 
     // Оновлюємо текстові значення поруч із повзунками.
     document.getElementById('filterFrequencyValue').textContent = `${frequency} Hz`;
